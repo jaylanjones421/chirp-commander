@@ -27,12 +27,12 @@ from config import config
 def unlock(hexData):
     data = int(str(hexData),16)
     timenow = time.asctime(time.localtime(time.time()))
-    cur.execute('SELECT * FROM users WHERE id=%s', str(data))
+    cur.execute("""SELECT * FROM users WHERE id=%s;""", str(data))
     res = cur.fetchone()
     kwikset.unlock()
-    cur.execute('INSERT INTO entrances (user_id, time) VALUES (%s,%s)',(str(data),timenow))
+    cur.execute("""INSERT INTO entrances (user_id, time) VALUES (%s,%s);""",(str(data),timenow))
     print("Welcome to Parkhub, " + res[1])
-    cur.execute('SELECT * FROM entrances')
+    cur.execute("""SELECT * FROM entrances;""")
     entrancesRes=cur.fetchall()
     print(entrancesRes)
 
