@@ -78,8 +78,6 @@ kwikset.setup_serial()
 
 # Read connection parameters for DB
 params = config()
-print('Connecting to the PostgreSQL database...')
-conn = psycopg2.connect(**params)
 
 # Initialise ConnectSDK
 sdk = ChirpConnect(app_key, app_secret, app_config)
@@ -104,6 +102,7 @@ sdk.start(send=True, receive=True)
 # connect to the PostgreSQL server
 print('Connecting to the PostgreSQL database...')
 conn = psycopg2.connect(**params)
+conn.set_session(autocommit=True)
 
 # create a cursor
 cur = conn.cursor()
