@@ -24,7 +24,8 @@ import psycopg2
 from config import config
 
 # Defining THE unlock function
-def unlock(data):
+def unlock(hexData):
+    data = int(str(hexData),16)
     timenow = time.asctime(time.localtime(time.time()))
     cur.execute('SELECT * FROM users WHERE id=%s', data)
     res = cur.fetchone()
