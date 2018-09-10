@@ -28,7 +28,7 @@ def unlock():
     kwikset.unlock()
     cur.execute('SELECT name FROM users')
     res = cur.fetchone()
-    print("Welcome to Parkhub, ", res[0])
+    print("Welcome to Parkhub, " + res[0])
     print(time.asctime(time.localtime(time.time())))
 
 class Callbacks(CallbackSet):
@@ -61,7 +61,7 @@ class Callbacks(CallbackSet):
         else:
 	    # Printing time of unlock && unlock
             unlock()
-	    
+
 # Setting chirp.io dev variables
 app_key = 'D10bF898f8C1eE22Ac4A7E3Dd'
 app_secret = 'E4E90B62DC6fa5980c1b99b097B6EBbB6ddfe5CEb3BBe2CA3c'
@@ -69,12 +69,16 @@ app_config = 'ocMI4g2RSn4Aii2i/abUnP0KzG+AAksvcoRBi/Ap2fuofF6fOaYpxq4UhastZUYs4d
 
 # Setting up GPIO pins
 kwikset.setup_serial()
+
 # Read connection parameters for DB
 params = config()
+print('Connecting to the PostgreSQL database...')
+conn = psycopg2.connect(**params)
 
 # Initialise ConnectSDK
 sdk = ChirpConnect(app_key, app_secret, app_config)
 print(str(sdk))
+
 # Show audio channels
 print(sdk.audio.query_devices())
 
