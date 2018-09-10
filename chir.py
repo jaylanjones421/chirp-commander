@@ -24,12 +24,13 @@ import psycopg2
 from config import config
 
 # Defining THE unlock function
-def unlock():
-    kwikset.unlock()
-    cur.execute('SELECT name FROM users')
+def unlock(data):
+    timenow = time.asctime(time.localtime(time.time()))
+    cur.execute('SELECT * FROM users WHERE id=%s', data)
     res = cur.fetchone()
-    print("Welcome to Parkhub, " + res[0])
-    print(time.asctime(time.localtime(time.time())))
+    kwikset.unlock()
+    cur.execute('INSERT INTO entrances (user-id, time) VALUES (%s,%s)',(data,timenow))
+    print("Welcome to Parkhub, " + res[1])
 
 class Callbacks(CallbackSet):
 
@@ -60,7 +61,8 @@ class Callbacks(CallbackSet):
             print('Decode failed!')
         else:
 	    # Printing time of unlock && unlock
-            unlock()
+
+            unlock(payload)
 
 # Setting chirp.io dev variables
 app_key = 'D10bF898f8C1eE22Ac4A7E3Dd'
