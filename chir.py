@@ -32,6 +32,9 @@ def unlock(hexData):
     kwikset.unlock()
     cur.execute('INSERT INTO entrances (user_id, time) VALUES (%s,%s)',(str(data),timenow))
     print("Welcome to Parkhub, " + res[1])
+    cur.execute('SELECT * FROM entrances')
+    entrancesRes=cur.fetchall()
+    print(entrancesRes)
 
 class Callbacks(CallbackSet):
 
