@@ -25,7 +25,7 @@ from config import config
 from selenium import webdriver
 
 # Web Driver to Giphy
-def showGif(site);
+def showGif(site):
     driver = webdriver.Chrome()  # Optional argument, if not specified will search path.
     driver.get(site);
     time.sleep(10) # Let the user actually see something!
