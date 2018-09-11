@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+#!/bin/sh
 # ------------------------------------------------------------------------
 #
 #  This file is part of the Chirp Connect Python SDK.
@@ -26,7 +27,7 @@ from selenium import webdriver
 
 # Web Driver to Giphy
 def showGif(site):
-    driver = webdriver.Chrome()  # Optional argument, if not specified will search path.
+    driver = webdriver.Chrome('/home/pi/chromedriver')  # Optional argument, if not specified will search path.
     driver.get(site);
     time.sleep(10) # Let the user actually see something!
     driver.quit()
