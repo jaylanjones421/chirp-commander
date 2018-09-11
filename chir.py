@@ -22,6 +22,14 @@ import time
 # DB related imports
 import psycopg2
 from config import config
+from selenium import webdriver
+
+# Web Driver to Giphy
+def showGif(site);
+    driver = webdriver.Chrome()  # Optional argument, if not specified will search path.
+    driver.get(site);
+    time.sleep(10) # Let the user actually see something!
+    driver.quit()
 
 # Defining THE unlock function
 def unlock(hexData):
@@ -31,10 +39,9 @@ def unlock(hexData):
     res = cur.fetchone()
     kwikset.unlock()
     cur.execute("""INSERT INTO entrances (user_id, time) VALUES (%s,%s);""",(str(data),timenow))
-    print("Welcome to Parkhub, " + res[1])
-    cur.execute("""SELECT * FROM entrances;""")
-    entrancesRes=cur.fetchall()
-    print(entrancesRes)
+    print(res[2])
+    print(" Welcome to Parkhub, " + res[1])
+    showGif(res[3])
 
 class Callbacks(CallbackSet):
 
