@@ -24,20 +24,23 @@ import time
 # DB related imports
 import psycopg2
 from config import config
-#from selenium import webdriver
+#from  selenium import webdriver  NOT WORKING YET
+# Importing web browsing modules
+import webbrowser
 import subprocess
-
 
 # Web Driver to Giphy
 def showGif(site):
+    browser = subprocess.Popen(['chromium-browser', site])
+    mixer.music.play()
+    time.sleep(30)
+    browser.terminate()
+    #siteUrl=str(site)
     #driver = webdriver.Chrome('/home/pi/chromedriver')  # Optional argument, if not specified will search path.
-    #driver.get(site)
+    #driver.get(siteUrl)
     #time.sleep(10) # Let the user actually see something!
     #driver.quit()
-    browser = subprocess.Popen(['chrome', str(site)])
-# browser now points to the instance of firefox I just opened
-    sleep(10)
-    browser.terminate()
+    #webbrowser.open(site,new=0)
 
 # Defining THE unlock function
 def unlock(hexData):
@@ -49,7 +52,8 @@ def unlock(hexData):
     cur.execute("""INSERT INTO entrances (user_id, time) VALUES (%s,%s);""",(str(data),timenow))
     print(res[2])
     print(" Welcome to Parkhub, " + res[1])
-    showGif(res[3])
+    site=str(res[3])
+    showGif(site)
 
 class Callbacks(CallbackSet):
 
