@@ -13,6 +13,7 @@ import argparse
 import sys
 import serial
 import time
+import os
 # Importing kwikset controller
 import kwikset
 from chirpsdk import ChirpConnect, CallbackSet, CHIRP_CONNECT_STATE
@@ -23,14 +24,20 @@ import time
 # DB related imports
 import psycopg2
 from config import config
-from selenium import webdriver
+#from selenium import webdriver
+import subprocess
+
 
 # Web Driver to Giphy
 def showGif(site):
-    driver = webdriver.Chrome('/home/pi/chromedriver')  # Optional argument, if not specified will search path.
-    driver.get(site);
-    time.sleep(10) # Let the user actually see something!
-    driver.quit()
+    #driver = webdriver.Chrome('/home/pi/chromedriver')  # Optional argument, if not specified will search path.
+    #driver.get(site)
+    #time.sleep(10) # Let the user actually see something!
+    #driver.quit()
+    browser = subprocess.Popen(['chrome', str(site)])
+# browser now points to the instance of firefox I just opened
+    sleep(10)
+    browser.terminate()
 
 # Defining THE unlock function
 def unlock(hexData):
