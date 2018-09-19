@@ -1,0 +1,71 @@
+# -*- coding: utf-8 -*-
+#!/bin/sh
+# ------------------------------------------------------------------------
+#
+#  This file is part of the Chirp Connect Python SDK.
+#  For full information on usage and licensing, see https://chirp.io/
+#
+#  Copyright (c) 2011-2018, Asio Ltd.
+#  All rights reserved.≈
+#
+# ------------------------------------------------------------------------
+import argparse
+import sys
+import serial
+import time
+import os
+# Importing kwikset controller
+import kwikset
+from chirpsdk import ChirpConnect, CallbackSet, CHIRP_CONNECT_STATE
+# Importing GPIO library
+import RPi.GPIO as GPIO
+# Importing time library for delay
+import time
+# DB related imports
+import psycopg2
+from config import config
+#from  selenium import webdriver  NOT WORKING YET
+# Importing web browsing modules
+import webbrowser
+import subprocess
+
+# Web Driver to Giphy
+def showGif(site):
+    browser = subprocess.Popen(['chromium-browser', site])
+    mixer.music.play()
+    time.sleep(30)
+    browser.terminate()
+    #siteUrl=str(site)
+    #driver = webdriver.Chrome('/home/pi/chromedriver')  # Optional argument, if not specified will search path.
+    #driver.get(siteUrl)
+    #time.sleep(10) # Let the user actually see something!
+    #driver.quit()
+    #webbrowser.open(site,new=0)
+
+# Defining THE unlock function
+def unlock(hexData):
+    hexData=str(hexData)
+    data = ""
+    index = 0;
+    for i in hexData:
+        if(index%2 != 0):
+          data += i
+        index+=1
+    print(str(data))
+    timenow = time.asctime(time.localtime(time.time()))
+    
+    cur.execute("""SELECT * FROM users WHERE id='%s';""",data)
+    res = cur.fetchone()
+    kwikset.unlock()
+    cur.execute("""INSERT INTO entrances (user_id, time) VALUES ('%s','%s');""",%(data,timenow))
+    print(res[2])
+    print(" Welcome to Parkhub, " + res[1])
+    site=str(res[3])
+    showGif(site)
+
+class Callbacks(CallbackSet):
+
+    def on_state_changed(self, previous_state, current_state):
+        """ Called when the SDK's state has changed """
+        print("State changed from {} to {}".format(
+            CHIRP_CONNECT_STATE.get(previous_state),

@@ -54,10 +54,10 @@ def unlock(hexData):
     print(str(data))
     timenow = time.asctime(time.localtime(time.time()))
     
-    cur.execute("""SELECT * FROM users WHERE id=%s;""",[data])
+    cur.execute("""SELECT * FROM users WHERE id='%s';""",data)
     res = cur.fetchone()
     kwikset.unlock()
-    cur.execute("""INSERT INTO entrances (user_id, time) VALUES (%s,%s);""",[data,timenow])
+    cur.execute("""INSERT INTO entrances (user_id, time) VALUES ('%s','%s');""",%(data,timenow))
     print(res[2])
     print(" Welcome to Parkhub, " + res[1])
     site=str(res[3])
