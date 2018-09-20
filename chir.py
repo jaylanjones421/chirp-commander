@@ -29,35 +29,10 @@ from config import config
 import webbrowser
 import subprocess
 
-import pyaudio  
-import wave
 
-# Web Driver to Giphy
-#def showGif(site):
-    #browser = subprocess.Popen(['chromium-browser', site])
-    #time.sleep(30)
-    #browser.terminate()
-    #siteUrl=str(site)
-    #driver = webdriver.Chrome('/home/pi/chromedriver')  # Optional argument, if not specified will search path.
-    #driver.get(siteUrl)
-    #time.sleep(10) # Let the user actually see something!
-    #driver.quit()
-    #webbrowser.open(site,new=0)
 
 # Defining THE unlock function
 def unlock(hexData):
-    #define stream chunk   
-    chunk = 1024  
-    #open a wav format music  
-    f = wave.open(r"mlg-airhorn.wav","rb")  
-    #instantiate PyAudio  
-    p = pyaudio.PyAudio() 
-    stream = p.open(format = p.get_format_from_width(f.getsampwidth()),  
-                channels = f.getnchannels(),  
-                rate = f.getframerate(),  
-                output = True)  
-    #read data  
-    sounddata = f.readframes(chunk)
     strHexData=str(hexData)
     data = ""
     index = 0
@@ -72,12 +47,7 @@ def unlock(hexData):
     kwikset.unlock()
     cur.execute("""INSERT INTO entrances (user_id, time) VALUES (%s,%s);""",[data,timenow])
     print(" Welcome to Parkhub, " + res[1])
-    while sounddata:  
-        stream.write(data)  
-        data = f.readframes(chunk)
-    stream.stop_stream()  
-    stream.close()
-    p.terminate()
+
 
 class Callbacks(CallbackSet):
 
@@ -108,7 +78,6 @@ class Callbacks(CallbackSet):
             print('Decode failed!')
         else:
 	    # Printing time of unlock && unlock
-
             unlock(payload)
 
 # Setting chirp.io dev variables
@@ -159,7 +128,7 @@ try:
         sys.stdout.flush()
 except KeyboardInterrupt:
     print('Exiting')
- 
+
 # Exit chirp.io SDK
 sdk.stop()
 sdk.close()
