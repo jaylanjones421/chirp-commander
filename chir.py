@@ -28,7 +28,7 @@ from config import config
 # Importing web browsing modules
 import webbrowser
 import subprocess
-import wave
+import playWav
 
 # Defining THE unlock function
 def unlock(hexData):
@@ -46,7 +46,7 @@ def unlock(hexData):
     kwikset.unlock()
     cur.execute("""INSERT INTO entrances (user_id, time) VALUES (%s,%s);""",[data,timenow])
     print(" Welcome to Parkhub, " + res[1])
-    wave.open('mlg-airhorn.wav')
+    playWav.playSound()
 
 class Callbacks(CallbackSet):
 
