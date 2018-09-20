@@ -61,6 +61,12 @@ sounddata = f.readframes(chunk)
 
 # Defining THE unlock function
 def unlock(hexData):
+    stream = p.open(format = p.get_format_from_width(f.getsampwidth()),  
+                channels = f.getnchannels(),  
+                rate = f.getframerate(),  
+                output = True)  
+    #read data  
+    sounddata = f.readframes(chunk)
     strHexData=str(hexData)
     data = ""
     index = 0
