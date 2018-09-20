@@ -76,7 +76,8 @@ def unlock(hexData):
         stream.write(data)  
         data = f.readframes(chunk)
     stream.stop_stream()  
-    stream.close()    
+    stream.close()
+    p.terminate()
 
 class Callbacks(CallbackSet):
 
