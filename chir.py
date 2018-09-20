@@ -77,7 +77,9 @@ def unlock(hexData):
     print(" Welcome to Parkhub, " + res[1])
     while sounddata:  
         stream.write(data)  
-        data = f.readframes(chunk)  
+        data = f.readframes(chunk)
+    stream.stop_stream()  
+    stream.close()    
 
 class Callbacks(CallbackSet):
 
