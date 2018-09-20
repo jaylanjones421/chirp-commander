@@ -32,15 +32,6 @@ import subprocess
 import pyaudio  
 import wave
 
-#define stream chunk   
-chunk = 1024  
-
-#open a wav format music  
-f = wave.open(r"mlg-airhorn.wav","rb")  
-
- 
-
-
 # Web Driver to Giphy
 #def showGif(site):
     #browser = subprocess.Popen(['chromium-browser', site])
@@ -167,13 +158,7 @@ try:
         sys.stdout.flush()
 except KeyboardInterrupt:
     print('Exiting')
-
-#stop stream  
-stream.stop_stream()  
-stream.close()  
-
-#close PyAudio  
-p.terminate() 
+ 
 # Exit chirp.io SDK
 sdk.stop()
 sdk.close()
