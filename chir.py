@@ -37,15 +37,9 @@ chunk = 1024
 
 #open a wav format music  
 f = wave.open(r"mlg-airhorn.wav","rb")  
-#instantiate PyAudio  
-p = pyaudio.PyAudio()  
-#open stream  
-stream = p.open(format = p.get_format_from_width(f.getsampwidth()),  
-                channels = f.getnchannels(),  
-                rate = f.getframerate(),  
-                output = True)  
-#read data  
-sounddata = f.readframes(chunk)  
+
+ 
+
 
 # Web Driver to Giphy
 #def showGif(site):
@@ -61,6 +55,8 @@ sounddata = f.readframes(chunk)
 
 # Defining THE unlock function
 def unlock(hexData):
+    #instantiate PyAudio  
+    p = pyaudio.PyAudio() 
     stream = p.open(format = p.get_format_from_width(f.getsampwidth()),  
                 channels = f.getnchannels(),  
                 rate = f.getframerate(),  
