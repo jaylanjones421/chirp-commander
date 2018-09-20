@@ -55,6 +55,10 @@ f = wave.open(r"mlg-airhorn.wav","rb")
 
 # Defining THE unlock function
 def unlock(hexData):
+    #define stream chunk   
+    chunk = 1024  
+    #open a wav format music  
+    f = wave.open(r"mlg-airhorn.wav","rb")  
     #instantiate PyAudio  
     p = pyaudio.PyAudio() 
     stream = p.open(format = p.get_format_from_width(f.getsampwidth()),  
