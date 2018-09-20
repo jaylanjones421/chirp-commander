@@ -16,6 +16,7 @@ import time
 import os
 # Importing kwikset controller
 import kwikset
+# Importing chirp 
 from chirpsdk import ChirpConnect, CallbackSet, CHIRP_CONNECT_STATE
 # Importing GPIO library
 import RPi.GPIO as GPIO
@@ -24,17 +25,33 @@ import time
 # DB related imports
 import psycopg2
 from config import config
-#from  selenium import webdriver  NOT WORKING YET
 # Importing web browsing modules
 import webbrowser
 import subprocess
 
+import pyaudio  
+import wave
+
+#define stream chunk   
+chunk = 1024  
+
+#open a wav format music  
+f = wave.open(r"air-horn.mp3","rb")  
+#instantiate PyAudio  
+p = pyaudio.PyAudio()  
+#open stream  
+stream = p.open(format = p.get_format_from_width(f.getsampwidth()),  
+                channels = f.getnchannels(),  
+                rate = f.getframerate(),  
+                output = True)  
+#read data  
+sounddata = f.readframes(chunk)  
+
 # Web Driver to Giphy
-def showGif(site):
-    browser = subprocess.Popen(['chromium-browser', site])
-    mixer.music.play()
-    time.sleep(30)
-    browser.terminate()
+#def showGif(site):
+    #browser = subprocess.Popen(['chromium-browser', site])
+    #time.sleep(30)
+    #browser.terminate()
     #siteUrl=str(site)
     #driver = webdriver.Chrome('/home/pi/chromedriver')  # Optional argument, if not specified will search path.
     #driver.get(siteUrl)
@@ -44,24 +61,23 @@ def showGif(site):
 
 # Defining THE unlock function
 def unlock(hexData):
-    hexData=str(hexData)
+    strHexData=str(hexData)
     data = ""
-    index = 0;
-    for i in hexData:
+    index = 0
+    for i in strHexData:
         if(index%2 != 0):
-          data += i
+            data += i
         index+=1
-    print(str(data))
     timenow = time.asctime(time.localtime(time.time()))
     
     cur.execute("""SELECT * FROM users WHERE id=%s;""",[data])
     res = cur.fetchone()
     kwikset.unlock()
     cur.execute("""INSERT INTO entrances (user_id, time) VALUES (%s,%s);""",[data,timenow])
-    print(res[2])
     print(" Welcome to Parkhub, " + res[1])
-    site=str(res[3])
-    showGif(site)
+    while sounddata:  
+        stream.write(data)  
+        data = f.readframes(chunk)  
 
 class Callbacks(CallbackSet):
 
@@ -144,6 +160,12 @@ try:
 except KeyboardInterrupt:
     print('Exiting')
 
+#stop stream  
+stream.stop_stream()  
+stream.close()  
+
+#close PyAudio  
+p.terminate() 
 # Exit chirp.io SDK
 sdk.stop()
 sdk.close()
