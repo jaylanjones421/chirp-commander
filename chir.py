@@ -36,7 +36,7 @@ import wave
 chunk = 1024  
 
 #open a wav format music  
-f = wave.open(r"air-horn.mp3","rb")  
+f = wave.open(r"mlg-airhorn.wav","rb")  
 #instantiate PyAudio  
 p = pyaudio.PyAudio()  
 #open stream  
