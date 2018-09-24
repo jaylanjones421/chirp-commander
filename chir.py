@@ -25,10 +25,15 @@ import time
 # DB related imports
 import psycopg2
 from config import config
+# Firebase
+from firebase import firebase
 # Importing web browsing modules
 import webbrowser
 import subprocess
 import playWav
+
+# initialize firebase connection
+fb = firebase.FirebaseApplication('https://parkhub-vts.firebaseio.com/', None)
 
 # Defining THE unlock function
 def unlock(hexData):
@@ -40,13 +45,17 @@ def unlock(hexData):
             data += i
         index+=1
     timenow = time.asctime(time.localtime(time.time()))
-    
-    cur.execute("""SELECT * FROM users WHERE id=%s;""",[data])
-    res = cur.fetchone()
-    kwikset.unlock()
-    cur.execute("""INSERT INTO entrances (user_id, time) VALUES (%s,%s);""",[data,timenow])
-    print(" Welcome to Parkhub, " + res[1])
-    playWav.playSound()
+    entrance = {'uid':data,
+                'time':timenow}
+    result = fb.get('/users', data)
+    print(result)
+    #if statement
+    if result != None:
+        kwikset.unlock()
+        newEntrance = fb.post('/entrances', entrance)
+    #cur.execute("""INSERT INTO entrances (user_id, time) VALUES (%s,%s);""",[data,timenow])
+    #print(" Welcome to Parkhub, " + res[1])
+        playWav.playSound()
 
 class Callbacks(CallbackSet):
 
