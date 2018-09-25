@@ -27,12 +27,16 @@ import psycopg2
 from config import config
 # Firebase
 from firebase import firebase
+import firebase_admin
+from firebase_admin import credentials
 # Importing web browsing modules
 import webbrowser
 import subprocess
 import playWav
 
 # initialize firebase connection
+cred = credentials.Certificate("/fb_service_key.json")
+firebase_admin.initialize_app(cred)
 fb = firebase.FirebaseApplication('https://parkhub-vts.firebaseio.com/', None)
 
 # Defining THE unlock function
@@ -53,8 +57,6 @@ def unlock(hexData):
     if result != None:
         kwikset.unlock()
         newEntrance = fb.post('/entrances', entrance)
-    #cur.execute("""INSERT INTO entrances (user_id, time) VALUES (%s,%s);""",[data,timenow])
-    #print(" Welcome to Parkhub, " + res[1])
         playWav.playSound()
 
 class Callbacks(CallbackSet):
@@ -118,15 +120,6 @@ sdk.set_callbacks(Callbacks())
 
 # Starting SDK
 sdk.start(send=True, receive=True)
-
-# connect to the PostgreSQL server
-print('Connecting to the PostgreSQL database...')
-conn = psycopg2.connect(**params)
-conn.set_session(autocommit=True)
-
-# create a cursor
-cur = conn.cursor()
-
 
 try:
     # Process audio streams
